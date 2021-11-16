@@ -1,3 +1,6 @@
+require 'net/http'
+require 'uri'
+
 class Api::V1::PostsController < ApplicationController
 
   before_action :set_post, only: [:show, :update, :destroy]
@@ -18,7 +21,7 @@ class Api::V1::PostsController < ApplicationController
 
   def create
     @post = Post.new(post_params)
-    if @post.save
+    if @post.save && image_exists?(@post.img)
       render json: PostRepresenter.new(@post).as_json
     else
       render json: @post.errors, status: :unprocessable_entity
@@ -63,8 +66,5 @@ class Api::V1::PostsController < ApplicationController
 
     def order
       params.fetch(:order, :asc)
-    end
-    
-
-
+    end 
 end
