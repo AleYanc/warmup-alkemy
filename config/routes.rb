@@ -4,7 +4,7 @@ Rails.application.routes.draw do
       post 'auth', to: 'auth#create'
       post 'auth/sign_up', to: 'users#create'
       delete 'logout', to: 'auth#destroy'
-      resources :users, except: [:create]
+      resources :users
       resources :posts
       get 'retrieve', to: 'posts#retrieve_deleted'
       post 'recover/:id', to: 'posts#recover'
