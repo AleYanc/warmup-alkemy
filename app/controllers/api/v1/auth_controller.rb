@@ -12,6 +12,16 @@ class Api::V1::AuthController < ApplicationController
     render json: {token: token}, status: :created
   end
 
+  def sign_up
+    @user = User.new(user_params)
+
+    if @user.save
+      render json: UserRepresenter.new(@user).as_json, status: :created
+    else
+      render json: @user.errors, status: :unprocessable_entity
+    end
+  end
+
   private
     def user
       @user ||= User.find_by(email: params.require(:email))
@@ -24,5 +34,9 @@ class Api::V1::AuthController < ApplicationController
     def handle_unauthenticated
       head :unauthorized
     end
+    
+    def user_params
+      params.permit(:password, :email)
+    end 
 
 end
